@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ShowTestRequest;
 use App\Http\Requests\StoreTestRequest;
 use App\Http\Resources\Test;
+use App\Http\Responce\Test\TestSuccessResponce;
+use App\Http\Responce\Test\TestUpdateResponce;
 use Faker\Factory;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -61,7 +63,7 @@ class TestController extends Controller
      *      ),
      *      @OA\Response(
      *          response=201,
-     *          description="Successful operation"     *
+     *          description="Successful operation"
      *       ),
      *      @OA\Response(
      *          response=422,
@@ -102,9 +104,10 @@ class TestController extends Controller
      *          )
      *      ),
      *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *       ),
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent (ref="#/components/schemas/TestSuccessResponce"),
+     *      ),
      *      @OA\Response(
      *          response=400,
      *          description="Bad Request"
@@ -118,10 +121,10 @@ class TestController extends Controller
     public function show($id)
     {
         $faker = Factory::create();
-        $data = [ $faker->text, $id];
-        return (new Test($data))
-            ->response()
-            ->setStatusCode(Response::HTTP_OK);
+        $responce = new TestSuccessResponce($id,$faker->text);
+
+        return $responce->data();
+
     }
 
     /**
@@ -129,11 +132,11 @@ class TestController extends Controller
      *      path="/api/v1/test/{id}/",
      *      operationId="UpdateById",
      *      tags={"Tests"},
-     *      summary="Delete Test information",
-     *      description="Delete Test data",
+     *      summary="Update Test information",
+     *      description="Update Test data",
      *      @OA\RequestBody(
      *          required=true,
-     *          @OA\JsonContent(ref="#/components/schemas/StoreTestRequest")
+     *          @OA\Schema (ref="#/components/schemas/StoreTestRequest")
      *      ),
      *      @OA\Parameter(
      *          name="id",
@@ -156,9 +159,9 @@ class TestController extends Controller
         $validated = $request->validate();
         $faker = Factory::create();
         $data = [ $request->json()->all()['name'], $faker->numberBetween(0,100)];
-        return (new Test($data))
-            ->response()
-            ->setStatusCode(Response::HTTP_CREATED);
+        $responce = new TestUpdateResponce($request->json()->all()['name'],$id);
+        return $responce;
+
     }
 
     /**
