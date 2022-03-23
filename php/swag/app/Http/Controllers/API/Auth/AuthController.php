@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
-use App\Http\Requests\SignupRequest;
+use App\Http\Requests\Auth\SignupRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -24,10 +24,13 @@ class AuthController extends Controller
      *   tags={"Auth"},
      *   summary="Signup",
      *   operationId="Signup",
-     *
+     *  *      @OA\RequestBody(
+     *          required=true,
+     *           @OA\JsonContent(ref="#/components/schemas/SignupRequest")
+     *      ),
      *   @OA\Parameter(
      *      name="email",
-     *      in="query",
+     *      in="path",
      *      required=true,
      *      @OA\Schema(
      *           type="string",
@@ -36,7 +39,7 @@ class AuthController extends Controller
      *      ),
      *     @OA\Parameter (
      *     name="name",
-     *     in="query",
+     *     in="path",
      *     required=true,
      *     @OA\Schema (
      *          type="string",
@@ -45,7 +48,7 @@ class AuthController extends Controller
      *      ),
      *   @OA\Parameter(
      *      name="password",
-     *      in="query",
+     *      in="path",
      *      required=true,
      *      @OA\Schema(
      *          type="string",
@@ -55,17 +58,17 @@ class AuthController extends Controller
      *   @OA\Response(
      *      response=201,
      *       description="Success Create user",
-     *      @OA\MediaType(
-     *           mediaType="application/json",
-     *      )
+     *      @OA\JsonContent (ref="#/components/schemas/AuthSignupSuccessResponce"),
      *   ),
      *   @OA\Response(
      *      response=404,
-     *      description="not found fail"
+     *      description="not found fail",
+     *      @OA\JsonContent (ref="#/components/schemas/HttpNotFoundResponce"),
      *   ),
      * @OA\Response(
      *      response=422,
-     *      description="The given data was invalid."
+     *      description="The given data was invalid.",
+     *      @OA\JsonContent (ref="#/components/schemas/AuthLoginUnprocessableResponce"),
      *   ),
      *)
      *
@@ -73,7 +76,7 @@ class AuthController extends Controller
 
     public function signup(SignupRequest $request)
     {
-        $validatedData = $request->validate();
+        $validatedData = $request->validated();
 
         $validatedData['password'] = Hash::make($validatedData['password']);
 
@@ -125,7 +128,8 @@ class AuthController extends Controller
      *   ),
      *   @OA\Response(
      *      response=404,
-     *      description="not found"
+     *      description="not found",
+     *      @OA\JsonContent(ref="#/components/schemas/HttpNotFoundResponce")
      *   ),
      *     @OA\Response(
      *      response=422,

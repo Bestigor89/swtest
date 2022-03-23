@@ -12,34 +12,50 @@ paths:
       parameters:
         -
           name: email
-          in: query
+          in: path
           required: true
           schema:
             type: string
             default: asdsad@qq.ee
         -
           name: name
-          in: query
+          in: path
           required: true
           schema:
             type: string
             default: Jimm
         -
           name: password
-          in: query
+          in: path
           required: true
           schema:
             type: string
             default: demo1234
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
       responses:
         201:
           description: 'Success Create user'
           content:
-            application/json: []
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSignupSuccessResponce'
         404:
           description: 'not found fail'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpNotFoundResponce'
         422:
           description: 'The given data was invalid.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthLoginUnprocessableResponce'
   /api/v1/auth/login:
     post:
       tags:
@@ -74,6 +90,10 @@ paths:
             application/json: []
         404:
           description: 'not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpNotFoundResponce'
         422:
           description: 'not found'
           content:
@@ -142,7 +162,7 @@ paths:
       tags:
         - Tests
       summary: 'Store new Test'
-      description: 'Returns Test data'
+      description: 'Store new Test'
       operationId: storeTest
       requestBody:
         required: true
@@ -258,6 +278,27 @@ paths:
           description: 'Welcome page'
 components:
   schemas:
+    SignupRequest:
+      title: 'Signup reqest'
+      description: 'Create new account of user'
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          title: name
+          description: 'Name of user'
+          example: 'Name of user'
+        email:
+          title: email
+          description: 'User email '
+          example: qwe@mail.com
+        password:
+          title: password
+          description: 'Username password'
+          example: demo1234
+      type: object
     LoginRequest:
       title: 'Login Request request'
       description: 'Reqest for auth users request body data'
@@ -346,12 +387,25 @@ components:
                   type: object
             type: object
       type: object
+    AuthSignupSuccessResponce:
+      title: AuthSignupSuccessResponce
+      description: AuthSignupSuccessResponce
+      properties:
+        status:
+          title: status
+          description: 'Success created user'
+          format: string
+          example: success
+      type: object
     HttpFailResponce:
       title: HttpFailResponce
       description: HttpFailResponce
     HttpForbiddenResponce:
       title: HttpForbiddenResponce
       description: HttpForbiddenResponce
+    HttpNotFoundResponce:
+      title: HttpNotFoundResponce
+      description: HttpNotFoundResponce
     HttpSuccessResponce:
       title: HttpSuccessResponce
       description: HttpSuccessResponce
