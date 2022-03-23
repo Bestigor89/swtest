@@ -30,7 +30,7 @@ class StoreTestRequest extends FormRequest
      *      example="First Test"
      * )
      *
-     * @var string
+     *
      */
     public $name;
 

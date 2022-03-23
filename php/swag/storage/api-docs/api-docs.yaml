@@ -1,0 +1,337 @@
+openapi: 3.0.0
+info:
+  title: 'Test Api'
+  version: 1.0.0
+paths:
+  /api/v1/auth/signup:
+    post:
+      tags:
+        - Auth
+      summary: Signup
+      operationId: Signup
+      parameters:
+        -
+          name: email
+          in: query
+          required: true
+          schema:
+            type: string
+            default: asdsad@qq.ee
+        -
+          name: name
+          in: query
+          required: true
+          schema:
+            type: string
+            default: Jimm
+        -
+          name: password
+          in: query
+          required: true
+          schema:
+            type: string
+            default: demo1234
+      responses:
+        201:
+          description: 'Success Create user'
+          content:
+            application/json: []
+        404:
+          description: 'not found fail'
+        422:
+          description: 'The given data was invalid.'
+  /api/v1/auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login
+      operationId: login
+      parameters:
+        -
+          name: email
+          in: query
+          required: true
+          schema:
+            type: string
+            default: asdsad@qq.ee
+        -
+          name: password
+          in: query
+          required: true
+          schema:
+            type: string
+            default: demo1234
+      responses:
+        200:
+          description: Success
+          content:
+            application/json: []
+        404:
+          description: 'not found'
+  /api/v1/auth/logout:
+    get:
+      tags:
+        - Auth
+      summary: 'LOGS OUT CURRENT LOGGED IN USER SESSION'
+      operationId: logout
+      responses:
+        200:
+          description: Success
+      security:
+        -
+          bearer: []
+  /api/v1/auth/user:
+    get:
+      tags:
+        - Auth
+      summary: 'LOGS OUT CURRENT LOGGED IN USER SESSION'
+      operationId: getAuthenticatedUser
+      parameters:
+        -
+          name: Authorization
+          in: header
+          description: 'Bearer {access-token}'
+          required: true
+          schema:
+            type: bearerAuth
+      responses:
+        200:
+          description: Success
+      security:
+        -
+          bearer: []
+  /api/v1/test:
+    get:
+      tags:
+        - Tests
+      summary: 'Get list of test'
+      description: 'Returns list of test'
+      operationId: getProjectsList
+      responses:
+        200:
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestListResponce'
+        401:
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpUnauthenticatedResponce'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpForbiddenResponce'
+    post:
+      tags:
+        - Tests
+      summary: 'Store new Test'
+      description: 'Returns Test data'
+      operationId: storeTest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreTestRequest'
+      responses:
+        201:
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestUpdateResponce'
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpFailResponce'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpForbiddenResponce'
+  '/api/v1/test/{id}/':
+    get:
+      tags:
+        - Tests
+      summary: 'Get Test information'
+      description: 'Returns Test data'
+      operationId: getTestById
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Test id'
+          required: true
+          schema:
+            type: integer
+            default: 1
+      responses:
+        200:
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSuccessResponce'
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpFailResponce'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpForbiddenResponce'
+    put:
+      tags:
+        - Tests
+      summary: 'Update Test information'
+      description: 'Update Test data'
+      operationId: UpdateById
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Test id'
+          required: true
+          schema:
+            type: integer
+            default: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTestRequest'
+      responses:
+        200:
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestUpdateResponce'
+    delete:
+      tags:
+        - Tests
+      summary: 'Delete Test information'
+      description: 'Delete Test data'
+      operationId: deleteById
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Test id'
+          required: true
+          schema:
+            type: integer
+            default: 1
+      responses:
+        200:
+          description: 'Successful operation'
+  /:
+    get:
+      description: 'Home page'
+      responses:
+        default:
+          description: 'Welcome page'
+components:
+  schemas:
+    StoreTestRequest:
+      title: 'Store Test request'
+      description: 'Store Test request body data'
+      required:
+        - name
+      properties:
+        name:
+          title: name
+          description: 'Name of the new Test'
+          example: 'First Test'
+      type: object
+    UpdateTestRequest:
+      title: 'Update Test request'
+      description: 'Update Test request body data'
+      required:
+        - name
+      properties:
+        name:
+          title: name
+          description: 'Name of the new Test'
+          example: 'First Test'
+      type: object
+    HttpFailResponce:
+      title: HttpFailResponce
+      description: HttpFailResponce
+    HttpForbiddenResponce:
+      title: HttpForbiddenResponce
+      description: HttpForbiddenResponce
+    HttpSuccessResponce:
+      title: HttpSuccessResponce
+      description: HttpSuccessResponce
+    HttpUnauthenticatedResponce:
+      title: HttpSuccessResponce
+      description: HttpSuccessResponce
+    TestListResponce:
+      title: TestListResponce
+      description: TestListResponce
+      properties:
+        tests:
+          title: 'Tests[]'
+          description: 'array of Test'
+          type: array
+          items:
+            properties:
+              id:
+                type: string
+                example: '1'
+              name:
+                type: string
+                example: 'qwe qweq qwe qwe'
+            type: object
+      type: object
+    TestSuccessResponce:
+      title: TestSuccessResponce
+      description: TestSuccessResponce
+      properties:
+        id:
+          title: ID
+          description: ID
+          format: int64
+          example: 1
+        name:
+          title: name
+          description: name
+          format: string
+          example: 'some name'
+      type: object
+    TestUpdateResponce:
+      title: TestUpdateResponce
+      description: TestUpdateResponce
+      properties:
+        id:
+          title: ID
+          description: ID
+          format: int64
+          example: 1
+        name:
+          title: name
+          description: name
+          format: string
+          example: 'some name'
+        status:
+          title: status
+          description: 'status of operation '
+          format: string
+          example: success
+      type: object
+security:
+  - []

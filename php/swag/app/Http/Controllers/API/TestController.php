@@ -5,11 +5,11 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShowTestRequest;
 use App\Http\Requests\StoreTestRequest;
-use App\Http\Resources\Test;
+use App\Http\Responce\HttpSuccessResponce;
+use App\Http\Responce\Test\TestListResponce;
 use App\Http\Responce\Test\TestSuccessResponce;
 use App\Http\Responce\Test\TestUpdateResponce;
 use Faker\Factory;
-use Symfony\Component\HttpFoundation\Response;
 
 class TestController extends Controller
 {
@@ -29,14 +29,17 @@ class TestController extends Controller
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
+     *          @OA\JsonContent (ref="#/components/schemas/TestListResponce"),
      *       ),
      *      @OA\Response(
      *          response=401,
      *          description="Unauthenticated",
+     *          @OA\JsonContent (ref="#/components/schemas/HttpUnauthenticatedResponce"),
      *      ),
      *      @OA\Response(
      *          response=403,
-     *          description="Forbidden"
+     *          description="Forbidden",
+     *          @OA\JsonContent (ref="#/components/schemas/HttpForbiddenResponce"),
      *      )
      *     )
      */
@@ -44,10 +47,13 @@ class TestController extends Controller
     {
         //
         $faker = Factory::create();
-        for($i=0;$i<20;$i++) {
-            $data[] = [ $faker->text(), $faker->numberBetween(0,100)];
+        for ($i = 0; $i < 20; $i++) {
+            $data[] = [$faker->text(), $faker->numberBetween(0, 100)];
         }
-        return new Test($data);
+
+        $responce = new TestListResponce($data);
+
+        return $responce->data();
     }
 
     /**
@@ -63,15 +69,18 @@ class TestController extends Controller
      *      ),
      *      @OA\Response(
      *          response=201,
-     *          description="Successful operation"
+     *          description="Successful operation",
+     *          @OA\JsonContent (ref="#/components/schemas/TestUpdateResponce"),
      *       ),
      *      @OA\Response(
-     *          response=422,
-     *          description="Bad Request"
+     *          response=400,
+     *          description="Bad Request",
+     *          @OA\JsonContent (ref="#/components/schemas/HttpFailResponce"),
      *      ),
      *      @OA\Response(
      *          response=403,
-     *          description="Forbidden"
+     *          description="Forbidden",
+     *          @OA\JsonContent (ref="#/components/schemas/HttpForbiddenResponce"),
      *      )
      * )
      */
@@ -80,10 +89,10 @@ class TestController extends Controller
         $validated = $request->validate();
 
         $faker = Factory::create();
-        $data = [ $request->json()->all()['name'], $faker->numberBetween(0,100)];
-        return (new Test($data))
-            ->response()
-            ->setStatusCode(Response::HTTP_CREATED);
+        $data = [$request->json()->all()['name'], $faker->numberBetween(0, 100)];
+        $responce = new TestUpdateResponce($request->json()->all()['name'], $faker->numberBetween(0, 100));
+
+        return $responce->data();
     }
 
     /**
@@ -110,21 +119,22 @@ class TestController extends Controller
      *      ),
      *      @OA\Response(
      *          response=400,
-     *          description="Bad Request"
+     *          description="Bad Request",
+     *          @OA\JsonContent (ref="#/components/schemas/HttpFailResponce"),
      *      ),
      *      @OA\Response(
      *          response=403,
-     *          description="Forbidden"
+     *          description="Forbidden",
+     *          @OA\JsonContent (ref="#/components/schemas/HttpForbiddenResponce"),
      *      )
      * )
      */
     public function show($id)
     {
         $faker = Factory::create();
-        $responce = new TestSuccessResponce($id,$faker->text);
+        $responce = new TestSuccessResponce($id, $faker->text);
 
         return $responce->data();
-
     }
 
     /**
@@ -136,7 +146,7 @@ class TestController extends Controller
      *      description="Update Test data",
      *      @OA\RequestBody(
      *          required=true,
-     *          @OA\Schema (ref="#/components/schemas/StoreTestRequest")
+     *           @OA\JsonContent(ref="#/components/schemas/UpdateTestRequest")
      *      ),
      *      @OA\Parameter(
      *          name="id",
@@ -151,6 +161,7 @@ class TestController extends Controller
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
+     *          @OA\JsonContent (ref="#/components/schemas/TestUpdateResponce")
      *       ),
      * )
      */
@@ -158,10 +169,9 @@ class TestController extends Controller
     {
         $validated = $request->validate();
         $faker = Factory::create();
-        $data = [ $request->json()->all()['name'], $faker->numberBetween(0,100)];
-        $responce = new TestUpdateResponce($request->json()->all()['name'],$id);
+        $data = [$request->json()->all()['name'], $faker->numberBetween(0, 100)];
+        $responce = new TestUpdateResponce($request->json()->all()['name'], $id);
         return $responce;
-
     }
 
     /**
@@ -184,11 +194,14 @@ class TestController extends Controller
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
+     *          @OA\Schema (ref="#/components/schemas/HttpSuccessResponce")
      *       ),
      * )
      */
     public function destroy($id)
     {
-        return Response::HTTP_OK;
+        $responce = new HttpSuccessResponce();
+
+        return $responce->data();
     }
 }
