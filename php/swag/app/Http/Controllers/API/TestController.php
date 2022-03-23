@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ShowTestRequest;
-use App\Http\Requests\StoreTestRequest;
+use App\Http\Requests\Test\ShowTestRequest;
+use App\Http\Requests\Test\StoreTestRequest;
 use App\Http\Responce\HttpSuccessResponce;
 use App\Http\Responce\Test\TestListResponce;
 use App\Http\Responce\Test\TestSuccessResponce;
@@ -62,7 +62,7 @@ class TestController extends Controller
      *      operationId="storeTest",
      *      tags={"Tests"},
      *      summary="Store new Test",
-     *      description="Returns Test data",
+     *      description="Store new Test",
      *      @OA\RequestBody(
      *          required=true,
      *          @OA\JsonContent(ref="#/components/schemas/StoreTestRequest")

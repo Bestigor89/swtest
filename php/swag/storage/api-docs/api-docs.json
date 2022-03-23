@@ -84,6 +84,16 @@
                         }
                     }
                 ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -93,6 +103,16 @@
                     },
                     "404": {
                         "description": "not found"
+                    },
+                    "422": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthLoginUnprocessableResponce"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -156,13 +176,34 @@
                 "operationId": "getProjectsList",
                 "responses": {
                     "200": {
-                        "description": "Successful operation"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TestListResponce"
+                                }
+                            }
+                        }
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpUnauthenticatedResponce"
+                                }
+                            }
+                        }
                     },
                     "403": {
-                        "description": "Forbidden"
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpForbiddenResponce"
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -185,13 +226,34 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Successful operation"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TestUpdateResponce"
+                                }
+                            }
+                        }
                     },
-                    "422": {
-                        "description": "Bad Request"
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpFailResponce"
+                                }
+                            }
+                        }
                     },
                     "403": {
-                        "description": "Forbidden"
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpForbiddenResponce"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -218,7 +280,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful operation1",
+                        "description": "Successful operation",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -228,10 +290,24 @@
                         }
                     },
                     "400": {
-                        "description": "Bad Request"
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpFailResponce"
+                                }
+                            }
+                        }
                     },
                     "403": {
-                        "description": "Forbidden"
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpForbiddenResponce"
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -255,11 +331,25 @@
                     }
                 ],
                 "requestBody": {
-                    "required": true
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateTestRequest"
+                            }
+                        }
+                    }
                 },
                 "responses": {
                     "200": {
-                        "description": "Successful operation"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TestUpdateResponce"
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -302,6 +392,27 @@
     },
     "components": {
         "schemas": {
+            "LoginRequest": {
+                "title": "Login Request request",
+                "description": "Reqest for auth users request body data",
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "title": "email",
+                        "description": "email for login",
+                        "example": "asdsad@qq.ee"
+                    },
+                    "password": {
+                        "title": "password",
+                        "description": "Username password",
+                        "example": "demo1234"
+                    }
+                },
+                "type": "object"
+            },
             "StoreTestRequest": {
                 "title": "Store Test request",
                 "description": "Store Test request body data",
@@ -312,8 +423,133 @@
                     "name": {
                         "title": "name",
                         "description": "Name of the new Test",
-                        "type": "string",
                         "example": "First Test"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateTestRequest": {
+                "title": "Update Test request",
+                "description": "Update Test request body data",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "title": "name",
+                        "description": "Name of the new Test",
+                        "example": "First Test"
+                    }
+                },
+                "type": "object"
+            },
+            "AuthLoginSuccessResponce": {
+                "title": "AuthLoginSuccessResponce",
+                "description": "AuthLoginSuccessResponce",
+                "properties": {
+                    "message": {
+                        "title": "message",
+                        "description": "message of global error",
+                        "format": "string",
+                        "example": "The given data was invalid."
+                    },
+                    "errors": {
+                        "title": "errors",
+                        "description": "message of errors",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "email": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "errors": {
+                                                "format": "string",
+                                                "example": "The provided credentials are incorrect."
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "AuthLoginUnprocessableResponce": {
+                "title": "AuthLoginUnprocessableResponce",
+                "description": "AuthLoginUnprocessableResponce",
+                "properties": {
+                    "message": {
+                        "title": "message",
+                        "description": "message of global error",
+                        "format": "string",
+                        "example": "The given data was invalid."
+                    },
+                    "errors": {
+                        "title": "errors",
+                        "description": "message of errors",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "email": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "errors": {
+                                                "format": "string",
+                                                "example": "The provided credentials are incorrect."
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "HttpFailResponce": {
+                "title": "HttpFailResponce",
+                "description": "HttpFailResponce"
+            },
+            "HttpForbiddenResponce": {
+                "title": "HttpForbiddenResponce",
+                "description": "HttpForbiddenResponce"
+            },
+            "HttpSuccessResponce": {
+                "title": "HttpSuccessResponce",
+                "description": "HttpSuccessResponce"
+            },
+            "HttpUnauthenticatedResponce": {
+                "title": "HttpSuccessResponce",
+                "description": "HttpSuccessResponce"
+            },
+            "TestListResponce": {
+                "title": "TestListResponce",
+                "description": "TestListResponce",
+                "properties": {
+                    "tests": {
+                        "title": "Tests[]",
+                        "description": "array of Test",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "example": "1"
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": "qwe qweq qwe qwe"
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"
@@ -333,6 +569,31 @@
                         "description": "name",
                         "format": "string",
                         "example": "some name"
+                    }
+                },
+                "type": "object"
+            },
+            "TestUpdateResponce": {
+                "title": "TestUpdateResponce",
+                "description": "TestUpdateResponce",
+                "properties": {
+                    "id": {
+                        "title": "ID",
+                        "description": "ID",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "title": "name",
+                        "description": "name",
+                        "format": "string",
+                        "example": "some name"
+                    },
+                    "status": {
+                        "title": "status",
+                        "description": "status of operation ",
+                        "format": "string",
+                        "example": "success"
                     }
                 },
                 "type": "object"

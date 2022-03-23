@@ -61,6 +61,12 @@ paths:
           schema:
             type: string
             default: demo1234
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
       responses:
         200:
           description: Success
@@ -68,6 +74,12 @@ paths:
             application/json: []
         404:
           description: 'not found'
+        422:
+          description: 'not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthLoginUnprocessableResponce'
   /api/v1/auth/logout:
     get:
       tags:
@@ -246,6 +258,22 @@ paths:
           description: 'Welcome page'
 components:
   schemas:
+    LoginRequest:
+      title: 'Login Request request'
+      description: 'Reqest for auth users request body data'
+      required:
+        - email
+        - password
+      properties:
+        email:
+          title: email
+          description: 'email for login'
+          example: asdsad@qq.ee
+        password:
+          title: password
+          description: 'Username password'
+          example: demo1234
+      type: object
     StoreTestRequest:
       title: 'Store Test request'
       description: 'Store Test request body data'
@@ -267,6 +295,56 @@ components:
           title: name
           description: 'Name of the new Test'
           example: 'First Test'
+      type: object
+    AuthLoginSuccessResponce:
+      title: AuthLoginSuccessResponce
+      description: AuthLoginSuccessResponce
+      properties:
+        message:
+          title: message
+          description: 'message of global error'
+          format: string
+          example: 'The given data was invalid.'
+        errors:
+          title: errors
+          description: 'message of errors'
+          type: array
+          items:
+            properties:
+              email:
+                type: array
+                items:
+                  properties:
+                    errors:
+                      format: string
+                      example: 'The provided credentials are incorrect.'
+                  type: object
+            type: object
+      type: object
+    AuthLoginUnprocessableResponce:
+      title: AuthLoginUnprocessableResponce
+      description: AuthLoginUnprocessableResponce
+      properties:
+        message:
+          title: message
+          description: 'message of global error'
+          format: string
+          example: 'The given data was invalid.'
+        errors:
+          title: errors
+          description: 'message of errors'
+          type: array
+          items:
+            properties:
+              email:
+                type: array
+                items:
+                  properties:
+                    errors:
+                      format: string
+                      example: 'The provided credentials are incorrect.'
+                  type: object
+            type: object
       type: object
     HttpFailResponce:
       title: HttpFailResponce
