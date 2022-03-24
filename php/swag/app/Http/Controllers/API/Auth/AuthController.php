@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LoginRequest;
+use App\Http\Requests\Auth\LoginRequest;
+
 use App\Http\Requests\Auth\SignupRequest;
+use App\Http\Responce\Auth\AuthLoginSuccessResponce;
+use App\Http\Responce\HttpSuccessResponce;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -103,7 +106,7 @@ class AuthController extends Controller
      *      ),
      *   @OA\Parameter(
      *      name="email",
-     *      in="query",
+     *      in="header",
      *      required=true,
      *      @OA\Schema(
      *           type="string",
@@ -112,7 +115,7 @@ class AuthController extends Controller
      *   ),
      *   @OA\Parameter(
      *      name="password",
-     *      in="query",
+     *      in="header",
      *      required=true,
      *      @OA\Schema(
      *          type="string",
@@ -121,10 +124,8 @@ class AuthController extends Controller
      *   ),
      *   @OA\Response(
      *      response=200,
-     *       description="Success",
-     *      @OA\MediaType(
-     *           mediaType="application/json",
-     *      )
+     *      description="Success",
+     *      @OA\JsonContent(ref="#/components/schemas/AuthLoginSuccessResponce")
      *   ),
      *   @OA\Response(
      *      response=404,
@@ -150,16 +151,11 @@ class AuthController extends Controller
                                                         'email' => ['The provided credentials are incorrect.'],
                                                     ]);
         }
+        $responce = new AuthLoginSuccessResponce($user,$user->createToken($request->email)->plainTextToken);
+
+        return $responce->data();
 
 
-        return response()->json(
-            [
-                'user'         => $user,
-                'access_token' => $user->createToken($request->email)->plainTextToken,
-                'test' => $user->createToken('AuthToken')->accessToken,
-            ],
-            Response::HTTP_OK
-        );
     }
 
 
@@ -171,7 +167,8 @@ class AuthController extends Controller
      *     operationId="logout",
      *     @OA\Response(
      *         response=200,
-     *         description="Success"
+     *         description="Success",
+     *         @OA\Schema (ref="#/components/schemas/HttpSuccessResponce"),
      *
      *     ),
      *     security={
@@ -183,8 +180,8 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-
-        return response()->json(null, Response::HTTP_OK);
+        $responce = new HttpSuccessResponce();
+        return $responce->data();
     }
 
 

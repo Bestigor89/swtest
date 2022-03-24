@@ -5,7 +5,7 @@ namespace App\Http\Requests\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 /**
  * @OA\Schema(
- *      title="Signup reqest",
+ *      title="Signup request",
  *      description="Create new account of user",
  *      type="object",
  *      required={"name", "email", "password" }

@@ -5,8 +5,6 @@ namespace App\Http\Responce\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Symfony\Component\HttpFoundation\Response;
-
-//
 //{
 //    "user": {
 //    "id": 1,
@@ -16,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 //    "created_at": "2022-03-22T09:35:10.000000Z",
 //    "updated_at": "2022-03-22T09:35:10.000000Z"
 //  },
-//  "access_token": "17|LSh06zSt7fxap3eNIkC9wYppWNCs4uAyVWPzgqr6",
+//  "access_token": "19|i8o8cUTUqNHawTjzb2LjMXihW0ieyzF2Y9cUosE5",
 //  "test": {
 //    "name": "AuthToken",
 //    "abilities": [
@@ -24,9 +22,9 @@ use Symfony\Component\HttpFoundation\Response;
 //    ],
 //    "tokenable_id": 1,
 //    "tokenable_type": "App\\Models\\User",
-//    "updated_at": "2022-03-23T10:56:45.000000Z",
-//    "created_at": "2022-03-23T10:56:45.000000Z",
-//    "id": 18
+//    "updated_at": "2022-03-23T15:11:12.000000Z",
+//    "created_at": "2022-03-23T15:11:12.000000Z",
+//    "id": 20
 //  }
 //}
 
@@ -40,41 +38,61 @@ class AuthLoginSuccessResponce
 {
     /**
      * @OA\Property(
-     *     title="message",
-     *     description="message of global error",
-     *     format="string",
-     *     example="The given data was invalid."
-     * )
-     */
-    public $message = "The given data was invalid.";
-    /**
-     * @OA\Property(
-     *     title="errors",
-     *     description="message of errors",
+     *     title="user",
+     *     description="user informations",
      *     type="array",
      *     @OA\Items(
-     *         @OA\Property (
-     *               property="email",
-     *               type="array",
-     *                  @OA\Items(
-     *                          @OA\Property (
-     *                               format="string",
-     *                              example="The provided credentials are incorrect.",
-     *                              ),
-     *                          ),
-     *                      ),
-     *              ),
+     *          @OA\Property (
+     *              property="id",
+     *              format="int64",
+     *              example="1"
+     *          ),
+     *     @OA\Property (
+     *              property="name",
+     *              format="string",
+     *              example="Jimm"
+     *          ),
+     *     @OA\Property (
+     *              property="email",
+     *              format="string",
+     *              example="asdsad@qq.ee"
+     *          ),
+     *     @OA\Property (
+     *              property="email_verified_at",
+     *              format="string",
+     *              example="null"
+     *          ),
+     *     @OA\Property (
+     *              property="created_at",
+     *              format="string",
+     *              example="2022-03-22T09:35:10.000000Z"
+     *          ),
+     *     @OA\Property (
+     *              property="updated_at",
+     *              format="string",
+     *              example="2022-03-22T09:35:10.000000Z"
+     *          ),
+     *      ),
+     * ),
+     */
+    public $user;
+
+    /**
+     * @OA\Property(
+     *     title="access_token",
+     *     description="access",
+     *     format="string",
+     *     example="19|i8o8cUTUqNHawTjzb2LjMXihW0ieyzF2Y9cUosE5"
      * )
      */
-    public $errors = [
-        'email'=> [
-            "The provided credentials are incorrect."
-        ],
-    ];
+    public $access_token;
 
-    public function __construct()
+
+
+    public function __construct($user, $access_token)
     {
-
+        $this->user = $user;
+        $this->access_token = $access_token;
     }
 
     public function data()
