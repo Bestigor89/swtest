@@ -127,20 +127,118 @@ paths:
           description: 'Bearer {access-token}'
           required: true
           schema:
-            type: bearerAuth
+            type: string
       responses:
         200:
           description: Success
       security:
         -
-          bearer: []
+          sanctum: []
+  /api/v1/label:
+    get:
+      tags:
+        - Label
+      summary: 'Get list of Label'
+      description: 'Returns list of Label'
+      operationId: getLabelList
+      responses:
+        200:
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelListResponce'
+        401:
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpUnauthenticatedResponce'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpForbiddenResponce'
+    post:
+      tags:
+        - Label
+      summary: 'Store new Label'
+      description: 'Store new Label'
+      operationId: storeLabel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreLabelRequest'
+      responses:
+        201:
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelUpdateResponce'
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpFailResponce'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpForbiddenResponce'
+        422:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelUnprocessableResponce'
+  '/api/v1/label/{id}/':
+    get:
+      tags:
+        - Label
+      summary: 'Get Label information'
+      description: 'Returns Label data'
+      operationId: getLabelById
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Label id'
+          required: true
+          schema:
+            type: integer
+            default: 1
+      responses:
+        200:
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelSuccessResponce'
+        400:
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpFailResponce'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpForbiddenResponce'
   /api/v1/test:
     get:
       tags:
         - Tests
       summary: 'Get list of test'
       description: 'Returns list of test'
-      operationId: getProjectsList
+      operationId: getTestList
       responses:
         200:
           description: 'Successful operation'
@@ -317,6 +415,22 @@ components:
           description: 'Username password'
           example: demo1234
       type: object
+    StoreLabelRequest:
+      title: 'Store Label request'
+      description: 'Store Label request body data'
+      required:
+        - name
+        - status
+      properties:
+        name:
+          title: name
+          description: 'Name of the new Label'
+          example: Green
+        status:
+          title: status
+          description: 'Status Label enabled or no '
+          example: 'true'
+      type: object
     StoreTestRequest:
       title: 'Store Test request'
       description: 'Store Test request body data'
@@ -424,6 +538,92 @@ components:
     HttpUnauthenticatedResponce:
       title: HttpSuccessResponce
       description: HttpSuccessResponce
+    LabelListResponce:
+      title: LabelListResponce
+      description: LabelListResponce
+      properties:
+        labels:
+          title: 'Labels[]'
+          description: 'array of Labels'
+          type: array
+          items:
+            properties:
+              id:
+                type: string
+                example: '1'
+              name:
+                type: string
+                example: Red
+              status:
+                type: boolean
+                example: 'true'
+            type: object
+      type: object
+    LabelSuccessResponce:
+      title: LabelSuccessResponce
+      description: LabelSuccessResponce
+      properties:
+        id:
+          title: ID
+          description: ID
+          format: int64
+          example: 1
+        name:
+          title: name
+          description: name
+          format: string
+          example: 'some name'
+        status:
+          title: status
+          description: status
+          format: bool
+          example: 'true'
+      type: object
+    LabelUnprocessableResponce:
+      title: HttpUnprocessableResponce
+      description: HttpUnprocessableResponce
+      properties:
+        message:
+          title: message
+          description: 'message of global error'
+          format: string
+          example: 'The given data was invalid.'
+        errors:
+          title: errors
+          description: 'message of errors'
+          type: array
+          items:
+            properties:
+              email:
+                type: array
+                items:
+                  properties:
+                    errors:
+                      format: string
+                      example: 'The provided credentials are incorrect.'
+                  type: object
+            type: object
+      type: object
+    LabelUpdateResponce:
+      title: LabelUpdateResponce
+      description: LabelUpdateResponce
+      properties:
+        id:
+          title: ID
+          description: ID
+          format: int64
+          example: 1
+        name:
+          title: name
+          description: name
+          format: string
+          example: 'some name'
+        status:
+          title: status
+          description: 'status of operation '
+          format: string
+          example: success
+      type: object
     TestListResponce:
       title: TestListResponce
       description: TestListResponce
@@ -477,5 +677,11 @@ components:
           format: string
           example: success
       type: object
+  securitySchemes:
+    sanctum:
+      type: apiKey
+      description: 'Enter token in format (Bearer <token>)'
+      name: Authorization
+      in: header
 security:
   - []
