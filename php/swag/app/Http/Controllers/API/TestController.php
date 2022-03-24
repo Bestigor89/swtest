@@ -22,7 +22,7 @@ class TestController extends Controller
     /**
      * @OA\Get(
      *      path="/api/v1/test",
-     *      operationId="getProjectsList",
+     *      operationId="getTestList",
      *      tags={"Tests"},
      *      summary="Get list of test",
      *      description="Returns list of test",
@@ -48,7 +48,10 @@ class TestController extends Controller
         //
         $faker = Factory::create();
         for ($i = 0; $i < 20; $i++) {
-            $data[] = [$faker->text(), $faker->numberBetween(0, 100)];
+            $data[] = [
+                'name' => $faker->text(50),
+                'id'   => $faker->numberBetween(0, 100),
+            ];
         }
 
         $responce = new TestListResponce($data);

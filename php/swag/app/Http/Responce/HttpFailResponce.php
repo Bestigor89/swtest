@@ -23,5 +23,4 @@ class HttpFailResponce
         return \response(json_encode($this))->setStatusCode(Response::HTTP_BAD_REQUEST);
     }
 
-
 }

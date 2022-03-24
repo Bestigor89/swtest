@@ -33,7 +33,7 @@ class AuthController extends Controller
      *      ),
      *   @OA\Parameter(
      *      name="email",
-     *      in="path",
+     *      in="query",
      *      required=true,
      *      @OA\Schema(
      *           type="string",
@@ -42,7 +42,7 @@ class AuthController extends Controller
      *      ),
      *     @OA\Parameter (
      *     name="name",
-     *     in="path",
+     *     in="query",
      *     required=true,
      *     @OA\Schema (
      *          type="string",
@@ -51,7 +51,7 @@ class AuthController extends Controller
      *      ),
      *   @OA\Parameter(
      *      name="password",
-     *      in="path",
+     *      in="query",
      *      required=true,
      *      @OA\Schema(
      *          type="string",
@@ -171,9 +171,7 @@ class AuthController extends Controller
      *         @OA\Schema (ref="#/components/schemas/HttpSuccessResponce"),
      *
      *     ),
-     *     security={
-     *         {"bearer": {}}
-     *     }
+
      * )
      */
 
@@ -193,8 +191,10 @@ class AuthController extends Controller
      *     operationId="getAuthenticatedUser",
      *     @OA\SecurityScheme (
      *              securityScheme="bearerAuth",
+     *              in="header",
      *              type="http",
-     *              scheme="bearer"
+     *              scheme="sanctum",
+     *              bearerFormat="JWT",
      *              ),
      *     @OA\Parameter(
      *         name="Authorization",
@@ -202,7 +202,7 @@ class AuthController extends Controller
      *         required=true,
      *         description="Bearer {access-token}",
      *         @OA\Schema(
-     *              type="bearerAuth"
+     *              type="string"
      *         )
      *      ),
      *     @OA\Response(
@@ -210,14 +210,13 @@ class AuthController extends Controller
      *         description="Success"
      *     ),
      *     security={
-     *         {"bearer": {}}
+     *         {"sanctum": {}}
      *     }
      * )
      */
     public function getAuthenticatedUser(Request $request)
     {
-        var_dump("asdada");
-        die();
+
         return $request->user();
     }
 
