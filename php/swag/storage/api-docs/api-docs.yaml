@@ -65,14 +65,14 @@ paths:
       parameters:
         -
           name: email
-          in: query
+          in: header
           required: true
           schema:
             type: string
             default: asdsad@qq.ee
         -
           name: password
-          in: query
+          in: header
           required: true
           schema:
             type: string
@@ -87,7 +87,9 @@ paths:
         200:
           description: Success
           content:
-            application/json: []
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthLoginSuccessResponce'
         404:
           description: 'not found'
           content:
@@ -278,8 +280,24 @@ paths:
           description: 'Welcome page'
 components:
   schemas:
+    LoginRequest:
+      title: 'Login Request request'
+      description: 'Reqest for auth users request body data'
+      required:
+        - email
+        - password
+      properties:
+        email:
+          title: email
+          description: 'email for login'
+          example: asdsad@qq.ee
+        password:
+          title: password
+          description: 'Username password'
+          example: demo1234
+      type: object
     SignupRequest:
-      title: 'Signup reqest'
+      title: 'Signup request'
       description: 'Create new account of user'
       required:
         - name
@@ -294,22 +312,6 @@ components:
           title: email
           description: 'User email '
           example: qwe@mail.com
-        password:
-          title: password
-          description: 'Username password'
-          example: demo1234
-      type: object
-    LoginRequest:
-      title: 'Login Request request'
-      description: 'Reqest for auth users request body data'
-      required:
-        - email
-        - password
-      properties:
-        email:
-          title: email
-          description: 'email for login'
-          example: asdsad@qq.ee
         password:
           title: password
           description: 'Username password'
@@ -341,26 +343,36 @@ components:
       title: AuthLoginSuccessResponce
       description: AuthLoginSuccessResponce
       properties:
-        message:
-          title: message
-          description: 'message of global error'
-          format: string
-          example: 'The given data was invalid.'
-        errors:
-          title: errors
-          description: 'message of errors'
+        user:
+          title: user
+          description: 'user informations'
           type: array
           items:
             properties:
+              id:
+                format: int64
+                example: '1'
+              name:
+                format: string
+                example: Jimm
               email:
-                type: array
-                items:
-                  properties:
-                    errors:
-                      format: string
-                      example: 'The provided credentials are incorrect.'
-                  type: object
+                format: string
+                example: asdsad@qq.ee
+              email_verified_at:
+                format: string
+                example: 'null'
+              created_at:
+                format: string
+                example: '2022-03-22T09:35:10.000000Z'
+              updated_at:
+                format: string
+                example: '2022-03-22T09:35:10.000000Z'
             type: object
+        access_token:
+          title: access_token
+          description: access
+          format: string
+          example: 19|i8o8cUTUqNHawTjzb2LjMXihW0ieyzF2Y9cUosE5
       type: object
     AuthLoginUnprocessableResponce:
       title: AuthLoginUnprocessableResponce
