@@ -1,40 +1,26 @@
 <?php
 
-namespace App\Http\Responce\Auth;
+namespace App\Http\Responces\Auth;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Symfony\Component\HttpFoundation\Response;
-//{
-//    "user": {
-//    "id": 1,
-//    "name": "Jimm",
-//    "email": "asdsad@qq.ee",
-//    "email_verified_at": null,
-//    "created_at": "2022-03-22T09:35:10.000000Z",
-//    "updated_at": "2022-03-22T09:35:10.000000Z"
-//  },
-//  "access_token": "19|i8o8cUTUqNHawTjzb2LjMXihW0ieyzF2Y9cUosE5",
-//  "test": {
-//    "name": "AuthToken",
-//    "abilities": [
-//        "*"
-//    ],
-//    "tokenable_id": 1,
-//    "tokenable_type": "App\\Models\\User",
-//    "updated_at": "2022-03-23T15:11:12.000000Z",
-//    "created_at": "2022-03-23T15:11:12.000000Z",
-//    "id": 20
-//  }
-//}
 
+//{
+//    "id": 1,
+//  "name": "Jimm",
+//  "email": "asdsad@qq.ee",
+//  "email_verified_at": null,
+//  "created_at": "2022-03-22T09:35:10.000000Z",
+//  "updated_at": "2022-03-22T09:35:10.000000Z"
+//}
 /**
  * @OA\Schema(
- *     title="AuthLoginSuccessResponce",
- *     description="AuthLoginSuccessResponce",
+ *     title="AuthUserInfoSuccessResponce",
+ *     description="AuthUserInfoSuccessResponce",
  * )
  */
-class AuthLoginSuccessResponce
+class AuthUserInfoSuccessResponce
 {
     /**
      * @OA\Property(
@@ -77,22 +63,14 @@ class AuthLoginSuccessResponce
      */
     public $user;
 
-    /**
-     * @OA\Property(
-     *     title="access_token",
-     *     description="access",
-     *     format="string",
-     *     example="19|i8o8cUTUqNHawTjzb2LjMXihW0ieyzF2Y9cUosE5"
-     * )
-     */
-    public $access_token;
 
 
 
-    public function __construct($user, $access_token)
+
+    public function __construct($user)
     {
         $this->user = $user;
-        $this->access_token = $access_token;
+
     }
 
     public function data()

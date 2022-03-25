@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 
 use App\Http\Requests\Auth\SignupRequest;
-use App\Http\Responce\Auth\AuthLoginSuccessResponce;
-use App\Http\Responce\HttpSuccessResponce;
+use App\Http\Responces\Auth\AuthLoginSuccessResponce;
+use App\Http\Responces\Auth\AuthUserInfoSuccessResponce;
+use App\Http\Responces\HttpSuccessResponce;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -27,10 +28,7 @@ class AuthController extends Controller
      *   tags={"Auth"},
      *   summary="Signup",
      *   operationId="Signup",
-     *  *      @OA\RequestBody(
-     *          required=true,
-     *           @OA\JsonContent(ref="#/components/schemas/SignupRequest")
-     *      ),
+     *
      *   @OA\Parameter(
      *      name="email",
      *      in="query",
@@ -100,13 +98,10 @@ class AuthController extends Controller
      *   tags={"Auth"},
      *   summary="Login",
      *   operationId="login",
-     *   @OA\RequestBody(
-     *          required=true,
-     *          @OA\JsonContent(ref="#/components/schemas/LoginRequest")
-     *      ),
+
      *   @OA\Parameter(
      *      name="email",
-     *      in="header",
+     *      in="query",
      *      required=true,
      *      @OA\Schema(
      *           type="string",
@@ -115,7 +110,7 @@ class AuthController extends Controller
      *   ),
      *   @OA\Parameter(
      *      name="password",
-     *      in="header",
+     *      in="query",
      *      required=true,
      *      @OA\Schema(
      *          type="string",
@@ -171,6 +166,9 @@ class AuthController extends Controller
      *         @OA\Schema (ref="#/components/schemas/HttpSuccessResponce"),
      *
      *     ),
+     *     security={
+     *         {"sanctum": {}}
+     *     },
 
      * )
      */
@@ -189,35 +187,42 @@ class AuthController extends Controller
      *     tags={"Auth"},
      *     summary="LOGS OUT CURRENT LOGGED IN USER SESSION",
      *     operationId="getAuthenticatedUser",
-     *     @OA\SecurityScheme (
-     *              securityScheme="bearerAuth",
-     *              in="header",
-     *              type="http",
-     *              scheme="sanctum",
-     *              bearerFormat="JWT",
-     *              ),
-     *     @OA\Parameter(
-     *         name="Authorization",
-     *         in="header",
-     *         required=true,
-     *         description="Bearer {access-token}",
-     *         @OA\Schema(
-     *              type="string"
-     *         )
-     *      ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Success"
-     *     ),
      *     security={
      *         {"sanctum": {}}
-     *     }
+     *     },
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/AuthUserInfoSuccessResponce"
+     *          )
+     *     ),
+     *      @OA\Response(
+     *      response=404,
+     *      description="not found fail",
+     *      @OA\JsonContent (ref="#/components/schemas/HttpNotFoundResponce"),
+     *   ),
+     *     @OA\Response (
+     *          response=401,
+     *          description="Unauthenticated",
+     *          @OA\JsonContent(
+     *             ref="#/components/schemas/HttpUnauthenticatedResponce"
+     *          ),
+     *      ),
+     *   @OA\SecurityScheme(
+     *          securityScheme="Authorization",
+     *          in="header",
+     *          name="Authorization",
+     *          type="http",
+     *          scheme="bearer",
+     *          bearerFormat="JWT",
+     *      ),
      * )
      */
     public function getAuthenticatedUser(Request $request)
     {
-
-        return $request->user();
+        $return = new AuthUserInfoSuccessResponce($request->user());
+        return $return->data();
     }
 
 

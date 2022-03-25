@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Test\ShowTestRequest;
+//use App\Http\Requests\Test\ShowTestRequest;
 use App\Http\Requests\Test\StoreTestRequest;
-use App\Http\Responce\HttpSuccessResponce;
-use App\Http\Responce\Test\TestListResponce;
-use App\Http\Responce\Test\TestSuccessResponce;
-use App\Http\Responce\Test\TestUpdateResponce;
+use App\Http\Responces\HttpSuccessResponce;
+use App\Http\Responces\Test\TestListResponce;
+use App\Http\Responces\Test\TestSuccessResponce;
+use App\Http\Responces\Test\TestUpdateResponce;
 use Faker\Factory;
 
 class TestController extends Controller

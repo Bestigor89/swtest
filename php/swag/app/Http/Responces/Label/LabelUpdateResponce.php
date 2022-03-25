@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Responce\Label;
+namespace App\Http\Responces\Label;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Symfony\Component\HttpFoundation\Response;

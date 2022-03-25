@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Responce\Test;
+namespace App\Http\Responces\Test;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Symfony\Component\HttpFoundation\Response;

@@ -6,9 +6,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 
 use App\Http\Requests\Label\StoreLabelRequest;
-use App\Http\Responce\Label\LabelListResponce;
-use App\Http\Responce\Label\LabelSuccessResponce;
-use App\Http\Responce\Label\LabelUpdateResponce;
+use App\Http\Responces\Label\LabelListResponce;
+use App\Http\Responces\Label\LabelSuccessResponce;
+use App\Http\Responces\Label\LabelUpdateResponce;
 
 use Faker\Factory;
 use Illuminate\Http\Request;

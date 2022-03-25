@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Responce;
+namespace App\Http\Responces;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -17,6 +17,15 @@ class HttpNotFoundResponce
     public function __construct()
     {
     }
+    /**
+     * @OA\Property(
+     *     title="message",
+     *     description="message",
+     *     format="string",
+     *     example="Error 404"
+     * )
+     */
+    public $message;
 
     public function data()
     {

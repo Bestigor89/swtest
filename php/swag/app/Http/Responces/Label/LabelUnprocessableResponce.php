@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Responce\Label;
+namespace App\Http\Responces\Label;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;

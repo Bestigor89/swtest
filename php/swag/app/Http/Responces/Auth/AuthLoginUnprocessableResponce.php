@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Responce\Auth;
+namespace App\Http\Responces\Auth;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;

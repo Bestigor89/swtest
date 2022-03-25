@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Responce\Test;
+namespace App\Http\Responces\Label;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -8,16 +8,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @OA\Schema(
- *     title="TestListResponce",
- *     description="TestListResponce",
+ *     title="LabelListResponce",
+ *     description="LabelListResponce",
  * )
  */
-class TestListResponce
+class LabelListResponce
 {
 /**
  * @OA\Property(
- *     title="Tests[]",
- *     description="array of Test",
+ *     title="Labels[]",
+ *     description="array of Labels",
  *     type="array",
  *      @OA\Items(
  *           @OA\Property(
@@ -28,17 +28,22 @@ class TestListResponce
  *           @OA\Property(
  *                         property="name",
  *                         type="string",
- *                         example="qwe qweq qwe qwe"
+ *                         example="Red"
+ *                      ),
+ *           @OA\Property(
+ *                         property="status",
+ *                         type="bool",
+ *                         example="true"
  *                      ),
  *      ),
  * )
  */
-    public $tests;
+    public $labels;
 
 
-    public function __construct($tests = null)
+    public function __construct($labels = null)
     {
-        $this->tests = $tests;
+        $this->labels = $labels;
 
     }
 

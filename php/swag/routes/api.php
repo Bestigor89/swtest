@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\API\Auth\AuthController;
+use App\Http\Controllers\API\LabelApiController;
 use App\Http\Controllers\API\TestController;
-use App\Http\Controllers\LabelApiController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -38,10 +39,12 @@ Route::prefix('v1')->group(function () {
 //});
 
 
+
 //public
 Route::group([
                  'prefix' => 'v1',
                  'as'     => 'api.'
              ], function () {
     Route::apiResource('test', TestController::class);
+    Route::apiResource('label', LabelApiController::class);
 });
