@@ -31,12 +31,6 @@ paths:
           schema:
             type: string
             default: demo1234
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SignupRequest'
       responses:
         201:
           description: 'Success Create user'
@@ -65,24 +59,18 @@ paths:
       parameters:
         -
           name: email
-          in: header
+          in: query
           required: true
           schema:
             type: string
             default: asdsad@qq.ee
         -
           name: password
-          in: header
+          in: query
           required: true
           schema:
             type: string
             default: demo1234
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginRequest'
       responses:
         200:
           description: Success
@@ -111,23 +99,34 @@ paths:
       responses:
         200:
           description: Success
+      security:
+        -
+          sanctum: []
   /api/v1/auth/user:
     get:
       tags:
         - Auth
       summary: 'LOGS OUT CURRENT LOGGED IN USER SESSION'
       operationId: getAuthenticatedUser
-      parameters:
-        -
-          name: Authorization
-          in: header
-          description: 'Bearer {access-token}'
-          required: true
-          schema:
-            type: string
       responses:
         200:
           description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthUserInfoSuccessResponce'
+        404:
+          description: 'not found fail'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpNotFoundResponce'
+        401:
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpUnauthenticatedResponce'
       security:
         -
           sanctum: []
@@ -520,21 +519,79 @@ components:
           format: string
           example: success
       type: object
+    AuthUserInfoSuccessResponce:
+      title: AuthUserInfoSuccessResponce
+      description: AuthUserInfoSuccessResponce
+      properties:
+        user:
+          title: user
+          description: 'user informations'
+          type: array
+          items:
+            properties:
+              id:
+                format: int64
+                example: '1'
+              name:
+                format: string
+                example: Jimm
+              email:
+                format: string
+                example: asdsad@qq.ee
+              email_verified_at:
+                format: string
+                example: 'null'
+              created_at:
+                format: string
+                example: '2022-03-22T09:35:10.000000Z'
+              updated_at:
+                format: string
+                example: '2022-03-22T09:35:10.000000Z'
+            type: object
+      type: object
     HttpFailResponce:
       title: HttpFailResponce
       description: HttpFailResponce
+      properties:
+        message:
+          title: message
+          description: message
+          format: string
+          example: 'Bad Request'
+      type: object
     HttpForbiddenResponce:
       title: HttpForbiddenResponce
       description: HttpForbiddenResponce
+      properties:
+        message:
+          title: message
+          description: message
+          format: string
+          example: Forbidden
+      type: object
     HttpNotFoundResponce:
       title: HttpNotFoundResponce
       description: HttpNotFoundResponce
+      properties:
+        message:
+          title: message
+          description: message
+          format: string
+          example: 'Error 404'
+      type: object
     HttpSuccessResponce:
       title: HttpSuccessResponce
       description: HttpSuccessResponce
     HttpUnauthenticatedResponce:
-      title: HttpSuccessResponce
-      description: HttpSuccessResponce
+      title: HttpUnauthenticatedResponce
+      description: HttpUnauthenticatedResponce
+      properties:
+        message:
+          title: message
+          description: message
+          format: string
+          example: Unauthenticated
+      type: object
     LabelListResponce:
       title: LabelListResponce
       description: LabelListResponce
@@ -677,8 +734,6 @@ components:
   securitySchemes:
     sanctum:
       type: apiKey
-      description: 'Enter token in format (Bearer <token>)'
+      description: 'Enter token in format (Bearer token)'
       name: Authorization
       in: header
-security:
-  - []
