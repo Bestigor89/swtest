@@ -15,7 +15,15 @@ use Illuminate\Routing\Controller as BaseController;
  *     path="/",
  *     description="Home page",
  *     @OA\Response(response="default", description="Welcome page")
- * )
+ * ),
+ *  @OA\Server(
+ *     url="http://localhost",
+ *     description="Localhost"
+ * ),
+ * @OA\Server(
+ *     url="http://google.com",
+ *     description="google.com"
+ * ),
  */
 class Controller extends BaseController
 {
